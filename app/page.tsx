@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ValueCards from '@/components/ValueCards';
 
 export default function Home() {
   return (
@@ -47,6 +48,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <ValueCards />
       </main>
       <Footer />
     </div>
