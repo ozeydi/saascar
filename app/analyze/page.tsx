@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Link, useLocation } from 'wouter';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Analyze() {
   const [url, setUrl] = useState('');
-  const [, setLocation] = useLocation();
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (url.trim()) {
-      setLocation('/analyze/details');
+      router.push('/analyze/details');
     }
   };
 
