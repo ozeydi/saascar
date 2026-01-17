@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AnalyzeFooter from '../components/AnalyzeFooter';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function AnalyzeDetails() {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     make: '',
     model: '',
@@ -26,9 +29,38 @@ export default function AnalyzeDetails() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/analyze/results');
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('analyses')
+        .insert([
+          {
+            make: form.make,
+            model: form.model,
+            year: Number(form.year),
+            engine: form.engine,
+            fuel_type: form.fuelType,
+            mileage: Number(form.mileage),
+            price: Number(form.price),
+            country: form.country,
+            city: form.city,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      router.push(`/analyze/results/${data.id}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,6 +83,7 @@ export default function AnalyzeDetails() {
         </div>
       </header>
       <main className='flex-1 py-12 px-4'>
+        <LoadingOverlay loading={loading} />
         <div className='max-w-lg mx-auto'>
           <div className='text-center mb-8'>
             <h1 className='text-2xl sm:text-3xl font-bold text-gray-900'>
