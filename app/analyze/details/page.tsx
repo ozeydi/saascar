@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AnalyzeFooter from '../components/AnalyzeFooter';
 import LoadingOverlay from '../components/LoadingOverlay';
-import { supabase } from '@/app/lib/supabaseClient';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function AnalyzeDetails() {
   const router = useRouter();
