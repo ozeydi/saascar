@@ -20,6 +20,7 @@ for insert
 to public
 with check (true);
 
+
 create policy "Allow public select"
 on analyses
 for select
