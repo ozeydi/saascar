@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import AnalyzeFooter from './components/AnalyzeFooter';
 
 export default function Analyze() {
   const [url, setUrl] = useState('');
@@ -74,13 +75,7 @@ export default function Analyze() {
         </div>
       </main>
 
-      <footer className='bg-white border-t border-gray-200'>
-        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-          <p className='text-center text-sm text-gray-500'>
-            SaasCar provides general guidance only.
-          </p>
-        </div>
-      </footer>
+      <AnalyzeFooter />
     </div>
   );
 }
