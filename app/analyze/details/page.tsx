@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AnalyzeFooter from '../components/AnalyzeFooter';
 import LoadingOverlay from '../components/LoadingOverlay';
 import { supabase } from '@/lib/supabaseClient';
+import { generateAnalysis } from '@/app/api/analyze/service';
 
 export default function AnalyzeDetails() {
   const router = useRouter();
@@ -34,6 +35,11 @@ export default function AnalyzeDetails() {
     setLoading(true);
 
     try {
+      const analysis = generateAnalysis({
+        ...form,
+        fuelType: form.fuelType,
+      });
+
       const { data, error } = await supabase
         .from('analyses')
         .insert([
@@ -47,15 +53,18 @@ export default function AnalyzeDetails() {
             price: Number(form.price),
             country: form.country,
             city: form.city,
+            result: analysis,
           },
         ])
-        .select()
+        .select('id')
         .single();
 
       if (error) {
-        console.error(error);
+        console.error('[SUPABASE_INSERT_ERROR]', error);
         return;
       }
+
+      sessionStorage.setItem('analysisResult', JSON.stringify(analysis));
 
       router.push(`/analyze/results/${data.id}`);
     } finally {
